@@ -9,6 +9,7 @@ public class TimerHandler extends Thread {
 
     int num;
     Handler handler;
+    boolean isRun = true;
 
     public TimerHandler(int num, Handler handler) {
         this.num = num;
@@ -29,11 +30,12 @@ public class TimerHandler extends Thread {
                 e.printStackTrace();
             }
 
-            Message msg = new Message();
-            msg.arg1 = num;
-            handler.sendMessage(msg);
-
-            num--;
+            if (isRun) {
+                Message msg = new Message();
+                msg.arg1 = num;
+                handler.sendMessage(msg);
+                num--;
+            }
 
         }
 

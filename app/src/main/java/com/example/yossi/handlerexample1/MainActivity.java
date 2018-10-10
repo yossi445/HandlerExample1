@@ -12,9 +12,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     TextView tv;
-    Button btnStart;
+    Button btnStart,btnStop;
     int max = 10;
     Handler handler;
+    TimerHandler timer1 = null;
 
 
     @Override
@@ -24,8 +25,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         tv = findViewById(R.id.tv);
         btnStart = findViewById(R.id.btnStart);
+        btnStop = findViewById(R.id.btnStop);
+
 
         btnStart.setOnClickListener(this);
+        btnStop.setOnClickListener(this);
+
+        btnStop.setEnabled(false);
 
         handler = new Handler(new Handler.Callback() {
             @Override
@@ -33,6 +39,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
                 tv.setText(String.valueOf(msg.arg1));
+                if(tv.getText().equals("0"))
+                {
+                    timer1 = null;
+
+                    btnStart.setEnabled(true);
+                    btnStop.setEnabled(false);
+
+                }
 
                 return true;
             }
@@ -46,9 +60,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(v == btnStart)
         {
             btnStart.setEnabled(false);
+            btnStop.setEnabled(true);
 
-            TimerHandler timer1 = new TimerHandler(max,handler);
-            timer1.start();
+            if(timer1 == null) {
+                timer1 = new TimerHandler(max, handler);
+                timer1.start();
+            }
+            else {
+                timer1.isRun = true;
+            }
+        }
+        else if(v == btnStop)
+        {
+            btnStart.setEnabled(true);
+            btnStop.setEnabled(false);
+
+            timer1.isRun = false;
+
         }
 
     }
